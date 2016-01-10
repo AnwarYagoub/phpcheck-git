@@ -5,6 +5,10 @@
 # XDebug check added by William Clemens <http://github.com/wesclemens>
 # Handle spaces in filenames Dave Barnwell <https://github.com/freshsauce>
 
+RED='\033[0;31m'
+NC='\033[0m'
+
+echo
 ROOT_DIR="$(pwd)/"
 LIST=$(git diff-index --cached --name-only --diff-filter=ACMR HEAD)
 ERRORS_BUFFER=""
@@ -19,7 +23,7 @@ do
             else
                 ERRORS_BUFFER="$ERRORS"
             fi
-            echo "Syntax errors found in file: $file "
+            echo -e "Syntax errors found in file: ${RED}$file${NC}"
         fi
 
         # Check for xdebug statments
@@ -36,10 +40,12 @@ do
 done
 if [ "$ERRORS_BUFFER" != "" ]; then
     echo 
-    echo "Found PHP parse errors: "
+    echo "Found PHP parse errors:"
+    echo "-----------------------"
     echo -e $ERRORS_BUFFER
     echo 
     echo "PHP parse errors found. Fix errors and commit again."
+    echo
     exit 1
 else
     echo "No PHP parse errors found. Committed successfully."
